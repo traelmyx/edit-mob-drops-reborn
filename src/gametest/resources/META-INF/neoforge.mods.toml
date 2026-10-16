@@ -1,0 +1,15 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "GPL-3.0"
+
+[[mods]]
+modId = "editmobdrops_gametest"
+version = "${version}"
+displayName = "Edit Mob Drops Tests"
+
+[[dependencies.editmobdrops_gametest]]
+modId = "editmobdrops"
+type = "required"
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"
