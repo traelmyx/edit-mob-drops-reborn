@@ -1,7 +1,11 @@
 package power.editmobdrops.handlers;
 
 import net.minecraft.core.registries.Registries;
+//? if >=1.21.11 {
+/*import net.minecraft.resources.Identifier;
+*///?} else {
 import net.minecraft.resources.ResourceLocation;
+//?}
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -19,7 +23,11 @@ import java.util.List;
 public final class LivingDropsEventHandler {
 	private static final RandomSource random = RandomSource.create();
 	/** Bosses, as tagged by NeoForge and other mods (c:bosses: the ender dragon and the wither in vanilla). */
+	//? if >=1.21.11 {
+	/*public static final TagKey<EntityType<?>> BOSSES = TagKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("c", "bosses"));
+	*///?} else {
 	public static final TagKey<EntityType<?>> BOSSES = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("c", "bosses"));
+	//?}
 
 	public static void onMobDrops(LivingDropsEvent event) {
 		ConfigHandler.bakeIfNeeded();

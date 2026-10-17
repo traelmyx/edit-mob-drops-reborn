@@ -7,7 +7,11 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.TagParser;
+//? if >=1.21.11 {
+/*import net.minecraft.resources.Identifier;
+*///?} else {
 import net.minecraft.resources.ResourceLocation;
+//?}
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -45,21 +49,37 @@ public class AddedDrop {
 
 		// Entity data for single mob drops
 		if (singleDrop) {
+			//? if >=1.21.11 {
+			/*Identifier entityId = Identifier.tryBuild(dropData.get(0), dropData.get(1));
+			*///?} else {
 			ResourceLocation entityId = ResourceLocation.tryBuild(dropData.get(0), dropData.get(1));
+			//?}
 			if (entityId == null || !BuiltInRegistries.ENTITY_TYPE.containsKey(entityId)) {
 				EditMobDrops.LOGGER.warn("Ignoring single mob drop \"{}\": unknown mob", rawDropData);
 				return;
 			}
+			//? if >=1.21.11 {
+			/*entityFrom = BuiltInRegistries.ENTITY_TYPE.getValue(entityId);
+			*///?} else {
 			entityFrom = BuiltInRegistries.ENTITY_TYPE.get(entityId);
+			//?}
 		}
 
 		// Item data
+		//? if >=1.21.11 {
+		/*Identifier itemId = Identifier.tryBuild(dropData.get(singleDrop ? 2 : 0), dropData.get(singleDrop ? 3 : 1));
+		*///?} else {
 		ResourceLocation itemId = ResourceLocation.tryBuild(dropData.get(singleDrop ? 2 : 0), dropData.get(singleDrop ? 3 : 1));
+		//?}
 		if (itemId == null || !BuiltInRegistries.ITEM.containsKey(itemId)) {
 			EditMobDrops.LOGGER.warn("Ignoring drop \"{}\": unknown item", rawDropData);
 			return;
 		}
+		//? if >=1.21.11 {
+		/*item = BuiltInRegistries.ITEM.getValue(itemId);
+		*///?} else {
 		item = BuiltInRegistries.ITEM.get(itemId);
+		//?}
 		componentFile = dropData.get(singleDrop ? 4 : 2);
 
 		// Stack size
@@ -111,7 +131,11 @@ public class AddedDrop {
 				EditMobDrops.LOGGER.warn("Component file {}.json not found", name);
 				return null;
 			}
+			//? if >=1.21.11 {
+			/*CompoundTag tag = TagParser.parseCompoundFully(Files.readString(file, StandardCharsets.UTF_8));
+			*///?} else {
 			CompoundTag tag = TagParser.parseTag(Files.readString(file, StandardCharsets.UTF_8));
+			//?}
 			return DataComponentPatch.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag)
 				.resultOrPartial(error -> EditMobDrops.LOGGER.warn("Component file {} is not valid: {}", name, error))
 				.orElse(null);

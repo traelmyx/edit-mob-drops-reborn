@@ -1,16 +1,8 @@
 package power.editmobdrops.test;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.Difficulty;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.LevelSettings;
-import net.minecraft.world.level.WorldDataConfiguration;
-import net.minecraft.world.level.levelgen.WorldOptions;
-import net.minecraft.world.level.levelgen.presets.WorldPresets;
 
 import power.editmobdrops.handlers.ConfigHandler;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -53,19 +45,19 @@ public final class ClientSmoke {
         try {
             switch (stage) {
                 case 0 -> {
-                    Screen screen = mc.screen;
-                    if (screen != null && mc.getOverlay() == null && ++ticks >= 20) {
+                    Screen screen = SmokeCompat.screen(mc);
+                    if (screen != null && SmokeCompat.overlayHidden(mc) && ++ticks >= 20) {
                         if (screen.getClass().getSimpleName().equals("LoadingErrorScreen")) {
                             fail("mod loading errors");
                         }
                         ticks = 0;
                         mc.options.tutorialStep = net.minecraft.client.tutorial.TutorialSteps.NONE;
-                        createWorld(mc);
+                        SmokeCompat.createFlatWorld(mc, GameType.SURVIVAL);
                         stage = 1;
                     }
                 }
                 case 1 -> {
-                    if (mc.level != null && mc.player != null && mc.screen == null) {
+                    if (mc.level != null && mc.player != null && SmokeCompat.screen(mc) == null) {
                         stage = 2;
                     }
                 }
@@ -76,11 +68,11 @@ public final class ClientSmoke {
                     }
                     if (ticks == 60) {
                         mc.player.setXRot(35);
-                        mc.options.hideGui = true;
+                        SmokeCompat.hideGui(mc, true);
                     }
                     if (ticks == 120) {
-                        Screenshot.grab(mc.gameDirectory, "drops.png", mc.getMainRenderTarget(), msg -> {});
-                        mc.options.hideGui = false;
+                        SmokeCompat.screenshot(mc, "drops.png");
+                        SmokeCompat.hideGui(mc, false);
                     }
                     if (ticks >= 130) {
                         long diamonds = mc.level.getEntitiesOfClass(ItemEntity.class, mc.player.getBoundingBox().inflate(10)).stream().filter(e -> e.getItem().is(Items.DIAMOND)).count();
@@ -99,13 +91,6 @@ public final class ClientSmoke {
         }
     }
 
-    private static void createWorld(Minecraft mc) {
-        LevelSettings settings = new LevelSettings("smoke", GameType.SURVIVAL, false, Difficulty.PEACEFUL, true, new GameRules(), WorldDataConfiguration.DEFAULT);
-        mc.createWorldOpenFlows().createFreshLevel("smoke", settings, new WorldOptions(0L, false, false),
-            registries -> registries.registryOrThrow(Registries.WORLD_PRESET).getHolderOrThrow(WorldPresets.FLAT).value().createWorldDimensions(),
-            mc.screen);
-    }
-
     // every mob drops a diamond: kill a few cows in front of the player
     private static void setup(Minecraft mc) {
         var server = mc.getSingleplayerServer();
@@ -113,13 +98,30 @@ public final class ClientSmoke {
             ConfigHandler.CONFIG.itemsToAdd.set(List.of("minecraft:diamond::1:3:100"));
             ConfigHandler.bakeConfig();
             var player = server.getPlayerList().getPlayers().get(0);
+            //? if >=1.21.11 {
+            /*var level = player.level();
+            *///?} else {
             var level = player.serverLevel();
+            //?}
             var look = player.getLookAngle();
             for (int i = -1; i <= 1; i++) {
+                double x = player.getX() + look.x * 4 + i * 1.5 * look.z, z = player.getZ() + look.z * 4 - i * 1.5 * look.x;
+                //? if >=26 {
+                /*var cow = net.minecraft.world.entity.EntityTypes.COW.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                *///?} else if >=1.21.11 {
+                /*var cow = net.minecraft.world.entity.EntityType.COW.create(level, net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                *///?} else {
                 var cow = net.minecraft.world.entity.EntityType.COW.create(level);
-                cow.moveTo(player.getX() + look.x * 4 + i * 1.5 * look.z, player.getY(), player.getZ() + look.z * 4 - i * 1.5 * look.x, 0, 0);
+                //?}
+                //? if >=1.21.11 {
+                /*cow.snapTo(x, player.getY(), z, 0, 0);
+                level.addFreshEntity(cow);
+                cow.hurtServer(level, level.damageSources().playerAttack(player), 1000);
+                *///?} else {
+                cow.moveTo(x, player.getY(), z, 0, 0);
                 level.addFreshEntity(cow);
                 cow.hurt(level.damageSources().playerAttack(player), 1000);
+                //?}
             }
         });
     }

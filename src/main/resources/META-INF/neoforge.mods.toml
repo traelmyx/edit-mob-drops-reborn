@@ -4,24 +4,24 @@ license = "GPL-3.0"
 issueTrackerURL = "https://github.com/traelmyx/edit-mob-drops-reborn/issues"
 
 [[mods]]
-modId = "editmobdrops"
+modId = "${id}"
 version = "${version}"
 displayName = "Edit Mob Drops Reborn"
 authors = "traelmyx, Powerthegreat"
-logoFile = "assets/editmobdrops/icon.png"
+${logo_key} = "assets/editmobdrops/icon.png"
 displayTest = "IGNORE_SERVER_VERSION"
 description = '''Add drops to every mob, to monsters, bosses or groups of mobs, or clear a mob's drops, from a config file. Based on Edit Mob Drops by Powerthegreat.'''
 
-[[dependencies.editmobdrops]]
+[[dependencies.${id}]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.1,)"
+versionRange = "[${neoforge_major},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.editmobdrops]]
+[[dependencies.${id}]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.1,1.21.2)"
+versionRange = "${mc_dep}"
 ordering = "NONE"
 side = "BOTH"
