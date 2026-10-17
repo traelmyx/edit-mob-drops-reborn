@@ -1,7 +1,11 @@
 package power.editmobdrops.handlers;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+//? if >=1.21.11 {
+/*import net.minecraft.resources.Identifier;
+*///?} else {
 import net.minecraft.resources.ResourceLocation;
+//?}
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -79,9 +83,17 @@ public final class ConfigHandler {
 		List<String> split = new ArrayList<>(Arrays.asList(raw.split("\\s*:\\s*")));
 		List<EntityType<?>> mobs = new ArrayList<>();
 		for (int i = 0; i < split.size() - 1; i += 2) {
+			//? if >=1.21.11 {
+			/*Identifier id = Identifier.tryBuild(split.get(i), split.get(i + 1));
+			*///?} else {
 			ResourceLocation id = ResourceLocation.tryBuild(split.get(i), split.get(i + 1));
+			//?}
 			if (id != null && BuiltInRegistries.ENTITY_TYPE.containsKey(id)) {
+				//? if >=1.21.11 {
+				/*mobs.add(BuiltInRegistries.ENTITY_TYPE.getValue(id));
+				*///?} else {
 				mobs.add(BuiltInRegistries.ENTITY_TYPE.get(id));
+				//?}
 			} else {
 				EditMobDrops.LOGGER.warn("Unknown mob {}:{} in \"{}\"", split.get(i), split.get(i + 1), raw);
 			}

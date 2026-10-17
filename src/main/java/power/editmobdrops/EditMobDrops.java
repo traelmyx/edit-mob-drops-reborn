@@ -28,6 +28,9 @@ public class EditMobDrops {
 			LOGGER.error("Could not create the editmobdrops config directory", e);
 		}
 
+		//? if >=26.3 {
+		/*container.registerConfig(ModConfig.Type.LOCAL, ConfigHandler.CONFIG_SPEC, Reference.MODID + "/editmobdrops.toml");
+		*///?} else
 		container.registerConfig(ModConfig.Type.COMMON, ConfigHandler.CONFIG_SPEC, Reference.MODID + "/editmobdrops.toml");
 		modBus.addListener((ModConfigEvent.Loading event) -> ConfigHandler.onConfigChanged(event.getConfig()));
 		modBus.addListener((ModConfigEvent.Reloading event) -> ConfigHandler.onConfigChanged(event.getConfig()));

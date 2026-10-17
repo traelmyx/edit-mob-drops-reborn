@@ -49,7 +49,7 @@ public final class LivingDropsEventHandler {
 				itemsToDrop.add(itemToAdd.createStack(randomStackSize(itemToAdd), registries));
 			}
 			// Boss chance
-			if (entityKilled.getType().is(BOSSES) && roll(itemToAdd.chances.get(2))) {
+			if (entityKilled.getType().builtInRegistryHolder().is(BOSSES) && roll(itemToAdd.chances.get(2))) {
 				itemsToDrop.add(itemToAdd.createStack(randomStackSize(itemToAdd), registries));
 			}
 			// If the mob is in any of the groups, run the chance for that group
