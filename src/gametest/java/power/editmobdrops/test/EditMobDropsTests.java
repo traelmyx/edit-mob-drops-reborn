@@ -93,6 +93,10 @@ public class EditMobDropsTests {
     public static void componentFile(GameTestHelper helper) {
         try {
             Files.createDirectories(Reference.CONFIG_PATH);
+            // text components are written as SNBT since 1.21.5, as JSON strings before
+            //? if >=1.21.11 {
+            /*Files.writeString(Reference.CONFIG_PATH.resolve("lucky.json"), "{\"minecraft:custom_name\": \"Lucky Bone\"}");
+            *///?} else
             Files.writeString(Reference.CONFIG_PATH.resolve("lucky.json"), "{\"minecraft:custom_name\": '\"Lucky Bone\"'}");
         } catch (java.io.IOException e) {
             throw new RuntimeException(e);
